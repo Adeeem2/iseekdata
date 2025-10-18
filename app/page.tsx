@@ -24,15 +24,15 @@ export default async function Home() {
             </div>
 
             {/* Large heading */}
-            <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight text-white">
               Hi, I&apos;m Edam
             </h1>
 
             {/* Thin paragraph with strategic bold */}
-            <p className="text-sm text-gray-700 leading-relaxed mb-2">
+            <p className="text-sm text-gray-300 leading-relaxed mb-2">
               <strong className="font-bold">Developer / Designer</strong>
             </p>
-            <p className="text-sm text-gray-600 leading-relaxed mb-8">
+            <p className="text-sm text-gray-400 leading-relaxed mb-8">
               I build elegant digital experiences and solve complex problems with clean,
               functional code. <strong className="font-semibold">Currently available</strong> for new projects.
             </p>
@@ -47,13 +47,8 @@ export default async function Home() {
           {/* Projects Section - Minimalist Box with Neon Border */}
           <section className="border-2 border-emerald-500 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold">Projects</h2>
-              <Link
-                href="/projects" 
-                className="text-sm text-gray-500 hover:text-black transition-colors"
-              >
-                View all →
-              </Link>
+              <h2 className="text-base font-bold text-white">Projects</h2>
+
             </div>
             
             <ul className="space-y-0">
@@ -61,7 +56,7 @@ export default async function Home() {
                 <li key={project.slug}>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="block py-1 text-sm text-gray-700 hover:text-black transition-colors"
+                    className="block py-1 text-sm text-gray-300 hover:text-white transition-colors"
                   >
                     {project.title}
                   </Link>
@@ -70,7 +65,7 @@ export default async function Home() {
             </ul>
 
             {featuredProjects.length === 0 && (
-              <p className="text-gray-400 text-center py-6 text-sm">
+              <p className="text-gray-600 text-center py-6 text-sm">
                 No projects yet. Check back soon.
               </p>
             )}
@@ -79,13 +74,8 @@ export default async function Home() {
           {/* Posts Section - Minimalist Box with Neon Border */}
           <section className="border-2 border-emerald-500 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold">Posts</h2>
-              <Link
-                href="/posts"
-                className="text-sm text-gray-500 hover:text-black transition-colors"
-              >
-                View all →
-              </Link>
+              <h2 className="text-base font-bold text-white">Posts</h2>
+
             </div>
 
             <ul className="space-y-0">
@@ -93,7 +83,7 @@ export default async function Home() {
                 <li key={post.slug}>
                   <Link
                     href={`/posts/${post.slug}`}
-                    className="block py-1 text-sm text-gray-700 hover:text-black transition-colors"
+                    className="block py-1 text-sm text-gray-300 hover:text-white transition-colors"
                   >
                     {post.title}
                   </Link>
@@ -102,7 +92,7 @@ export default async function Home() {
             </ul>
 
             {recentPosts.length === 0 && (
-              <p className="text-gray-400 text-center py-6 text-sm">
+              <p className="text-gray-600 text-center py-6 text-sm">
                 No posts yet. Coming soon.
               </p>
             )}

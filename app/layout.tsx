@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased bg-black`}>
         {/* Top centered social icons */}
         <div className="w-full border-b border-black bg-black">
           <div className="max-w-content mx-auto px-8 md:px-12 py-4">
@@ -47,7 +47,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <main className="min-h-screen">
+        <main className="min-h-screen bg-black">
           {children}
         </main>
       </body>
