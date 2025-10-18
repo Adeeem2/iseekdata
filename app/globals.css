@@ -1,157 +1,82 @@
 @import "tailwindcss";
 
-/* Modern, minimal base styles with light/dark support */
-@theme inline {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  --color-bg: #ffffff;
-  --color-fg: #0a0a0a;
-  --color-muted: #6b7280; /* gray-500 */
-  --color-border: #e5e7eb; /* gray-200 */
-  --color-accent: #111827; /* gray-900 */
-}
-
+/* Modern, simple global styles powered by CSS variables. */
 :root {
-  color-scheme: light dark;
-  --bg: var(--color-bg);
-  --fg: var(--color-fg);
-  --muted: var(--color-muted);
-  --border: var(--color-border);
-  --accent: var(--color-accent);
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Colors - Light */
+  --bg: #ffffff;
+  --fg: #0b0b0b;
+  --muted: #6b7280; /* gray-500 */
+  --border: #e5e7eb; /* gray-200 */
+  --surface: #f9fafb; /* gray-50 */
+  --accent: #2563eb; /* blue-600 */
+  --page-accent: var(--accent);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b0b0c;
-    --fg: #f3f4f6; /* gray-100 */
+    --bg: #0b0b0b;
+    --fg: #e5e7eb;
     --muted: #9ca3af; /* gray-400 */
     --border: #1f2937; /* gray-800 */
-    --accent: #f9fafb; /* gray-50 */
+    --surface: #111827; /* gray-900 */
+    --accent: #60a5fa; /* blue-400 */
   }
 }
 
-/* Reset and layout primitives */
+/* Base reset */
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.6;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--bg);
-  color: var(--fg);
 }
 
-img, video { max-width: 100%; height: auto; }
-
-/* Typography */
-h1, h2, h3, h4 { line-height: 1.25; font-weight: 700; }
-p { color: var(--fg); }
-small { color: var(--muted); }
-
-/* Links */
-a {
-  color: inherit;
-  text-underline-offset: 2px;
-  text-decoration-thickness: 1px;
-}
+/* Links and focus */
+a { color: inherit; text-decoration: none; }
 a:hover { color: var(--accent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* Focus styles for accessibility */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
+/* Subtle containers */
+.card-surface { background: var(--surface); border: 1px solid var(--border); }
+.hr { border: 0; height: 1px; background: var(--border); }
 
-/* Border + subtle surfaces */
-.border-base { border-color: var(--border); }
+/* Content width utility */
+.max-w-content { max-width: 72rem; }
+
+/* Accent top utility used by project page. Consumes --page-accent if provided. */
+.accent-top { border-top: 4px solid var(--page-accent, var(--accent)); }
+
+/* Prose defaults for MDX readability without heavy styling */
+.prose { color: var(--fg); }
+.prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.prose code { background: var(--surface); border: 1px solid var(--border); padding: 0.15rem 0.35rem; border-radius: 0.375rem; }
+.prose pre { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; }
+.prose blockquote { border-left: 4px solid var(--accent); padding-left: 1rem; color: var(--muted); }
+
+/* Muted text utility */
 .text-muted { color: var(--muted); }
 
-/* Container helpers */
-.container,
-.max-w-content {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 2rem; /* 32px */
-  padding-right: 2rem;
-}
+/* Border base utility to harmonize with design */
+.border-base { border-color: var(--border); }
 
-/* Card primitive */
-.card {
-  border: 3px solid var(--border);
-  border-radius: 0;
-  background: color-mix(in oklab, var(--bg) 94%, black 6%);
-}
-
-/* Smooth transitions without disabling animations */
-.transition-base { transition: color .2s ease, background-color .2s ease, border-color .2s ease; }
-
-/* Utility: subtle hover */
-.hover\:soft:hover { background: color-mix(in oklab, var(--bg) 96%, black 4%); }
-
-/* Unique touch: animated underline using theme accent */
-.u-underline {
-  background-image: linear-gradient(90deg, var(--accent), color-mix(in oklab, var(--accent) 60%, var(--fg) 40%));
-  background-repeat: no-repeat;
-  background-size: 0% 2px;
-  background-position: 0 100%;
-}
-.u-underline:hover,
-.u-underline[aria-current="page"] {
-  background-size: 100% 2px;
-}
+/* Primary/secondary button helpers if needed by components */
+.text-foreground { color: var(--fg); }
+.text-accent { color: var(--accent); }
+.bg-accent { background: var(--accent); }
 
 
-/* --- Minimal prose and accent helpers for posts/projects --- */
-.prose-minimal {
-  --prose-fg: var(--fg);
-  --prose-muted: var(--muted);
-  --prose-border: var(--border);
-}
-.prose-minimal h1, .prose-minimal h2, .prose-minimal h3, .prose-minimal h4 {
-  color: var(--prose-fg);
-  margin-top: 1.25em;
-  margin-bottom: .6em;
-}
-.prose-minimal p { color: var(--prose-fg); margin: 0 0 1em 0; }
-.prose-minimal ul, .prose-minimal ol { margin: 0 0 1em 1.25em; }
-.prose-minimal li { color: var(--prose-fg); margin: .25em 0; }
-.prose-minimal a { color: inherit; text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--accent) 60%, var(--prose-border) 40%); }
-.prose-minimal a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-.prose-minimal code { background: color-mix(in oklab, var(--bg) 92%, black 8%); padding: .15rem .4rem; border-radius: 0; border: 1px solid var(--prose-border); font-size: .9em; }
-.prose-minimal pre { background: color-mix(in oklab, var(--bg) 90%, black 10%); padding: 1rem; border: 3px solid var(--prose-border); border-radius: 0; overflow-x: auto; }
-.prose-minimal blockquote { border-left: 4px solid var(--prose-border); margin: 1em 0; padding-left: 1em; color: var(--prose-muted); font-style: italic; }
-.prose-minimal hr { border: none; border-top: 3px solid var(--prose-border); margin: 2rem 0; }
-.prose-minimal img { border: 3px solid var(--prose-border); border-radius: 0; display: block; margin: 1rem 0; }
 
-/* Accent palette and container utility */
-:root {
-  --accent-a: #3b82f6; /* blue-500 */
-  --accent-b: #10b981; /* emerald-500 */
-  --accent-c: #f59e0b; /* amber-500 */
-  --accent-d: #ef4444; /* red-500 */
-  --accent-e: #8b5cf6; /* violet-500 */
-  --accent-f: #14b8a6; /* teal-500 */
-}
-
-.accent-container {
-  position: relative;
-}
-.accent-container::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0; /* left stripe */
-  width: 4px;
-  background: var(--page-accent, var(--accent));
-}
-/* top bar variant */
-.accent-top::before {
-  inset: 0 0 auto 0;
-  height: 4px;
-  width: 100%;
-}
-
-:root { --page-accent: var(--accent); }
+/* Utilities and fixes */
+.border-accent { border-color: var(--accent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

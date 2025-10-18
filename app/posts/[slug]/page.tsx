@@ -4,7 +4,6 @@ import { MDXContent } from '@/components/MDXContent';
 import Button from '@/components/Button';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
-import type { CSSProperties } from 'react';
 
 interface PostPageProps {
   params: Promise<{
@@ -43,21 +42,11 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  const palette = ['var(--accent-a)', 'var(--accent-b)', 'var(--accent-c)', 'var(--accent-d)', 'var(--accent-e)', 'var(--accent-f)'];
-  const pickAccent = (s: string) => {
-    let sum = 0;
-    for (let i = 0; i < s.length; i++) sum = (sum + s.charCodeAt(i)) % 2147483647;
-    return palette[sum % palette.length];
-  };
-  const pageAccent = pickAccent(slug);
-  type WithAccent = CSSProperties & { ['--page-accent']?: string };
-  const styleVars: WithAccent = { ['--page-accent']: pageAccent };
-
   return (
-    <div className="w-full max-w-content mx-auto px-6 py-12 accent-top" style={styleVars}>
+    <div className="w-full max-w-content mx-auto px-6 py-12">
       {/* Back Button */}
       <Button 
-        href="/posts" 
+        href="/"
         variant="secondary"
         className="mb-8 flex items-center gap-2"
       >
@@ -66,22 +55,22 @@ export default async function PostPage({ params }: PostPageProps) {
       </Button>
 
       {/* Post Header */}
-      <header className="mb-10">
-        <time className="text-xs tracking-wide inline-block px-2 py-1 border border-base text-muted mb-3">
+      <header className="mb-12">
+        <time className="text-sm text-muted mb-4 block">
           {new Date(post.date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           })}
         </time>
-        <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">
-          {post.title}
-        </h1>
-        <p className="text-base text-muted max-w-prose">{post.excerpt}</p>
+        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+        <p className="text-xl text-muted">{post.excerpt}</p>
       </header>
 
       {/* Post Content */}
-      <MDXContent source={post.content} />
+      <article className="prose prose-lg max-w-none">
+        <MDXContent source={post.content} />
+      </article>
     </div>
   );
 }

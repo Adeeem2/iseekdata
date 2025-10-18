@@ -18,15 +18,7 @@ export default function Contact() {
 
     try {
       // Replace with your Formspree endpoint
-      const endpoint = 'https://formspree.io/f/YOUR_FORM_ID';
-      if (endpoint.includes('YOUR_FORM_ID')) {
-        // Developer hint: configure Formspree ID
-        await new Promise((r) => setTimeout(r, 400));
-        setStatus('error');
-        return;
-      }
-
-      const response = await fetch(endpoint, {
+      const response = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,26 +56,26 @@ export default function Contact() {
 
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* Contact Info Card */}
-          <div className="card p-6">
-            <Mail className="w-8 h-8 text-[color:var(--accent)] mb-4" />
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <Mail className="w-8 h-8 text-accent mb-4" />
             <h3 className="text-lg font-semibold mb-2">Email</h3>
             <a 
               href="mailto:your@email.com" 
-              className="text-muted hover:text-[color:var(--accent)] transition-base u-underline"
+              className="text-muted hover:text-accent transition-colors"
             >
               your@email.com
             </a>
           </div>
 
-          <div className="card p-6">
-            <MessageSquare className="w-8 h-8 text-[color:var(--accent)] mb-4" />
+          <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <MessageSquare className="w-8 h-8 text-accent mb-4" />
             <h3 className="text-lg font-semibold mb-2">Social</h3>
             <div className="space-y-1">
               <a 
                 href="https://twitter.com/yourusername" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-muted hover:text-[color:var(--accent)] transition-base u-underline"
+                className="block text-muted hover:text-accent transition-colors"
               >
                 Twitter
               </a>
@@ -91,7 +83,7 @@ export default function Contact() {
                 href="https://linkedin.com/in/yourusername" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-muted hover:text-[color:var(--accent)] transition-base u-underline"
+                className="block text-muted hover:text-accent transition-colors"
               >
                 LinkedIn
               </a>
@@ -100,7 +92,7 @@ export default function Contact() {
         </div>
 
         {/* Contact Form */}
-        <div className="card p-8">
+        <div className="bg-white border border-gray-200 rounded-lg p-8">
           <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
           
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -118,8 +110,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                aria-invalid={status === 'error' ? true : undefined}
-                className="w-full px-4 py-3 border border-base rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="Your name"
               />
             </div>
@@ -138,8 +129,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                aria-invalid={status === 'error' ? true : undefined}
-                className="w-full px-4 py-3 border border-base rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
                 placeholder="your@email.com"
               />
             </div>
@@ -158,8 +148,7 @@ export default function Contact() {
                 onChange={handleChange}
                 required
                 rows={6}
-                aria-invalid={status === 'error' ? true : undefined}
-                className="w-full px-4 py-3 border border-base rounded-lg bg-transparent focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent resize-none"
                 placeholder="Tell me about your project..."
               />
             </div>

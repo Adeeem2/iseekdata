@@ -9,9 +9,9 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="w-full max-w-content mx-auto px-8 md:px-12 py-12 mt-20 border-t border-base">
+    <footer className="w-full max-w-content mx-auto px-8 md:px-12 py-12 mt-20 border-t border-black">
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-        <p className="text-sm text-muted">
+        <p className="text-sm text-gray-600">
           © {new Date().getFullYear()} Your Name
         </p>
         
@@ -23,7 +23,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={link.label}
-              className="transition-base hover:text-[color:var(--accent)]"
+              className="text-black hover:text-gray-600 transition-colors"
             >
               <link.icon className="w-5 h-5" />
             </a>
