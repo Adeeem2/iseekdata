@@ -27,7 +27,7 @@ const components = {
   code: (props: ComponentProps) => {
     // Inline code (no className means it's inline)
     if (!props.className) {
-      return <code className="font-mono text-sm" {...props} />;
+      return <code className="font-mono text-sm bg-transparent text-emerald-400 px-1" {...props} />;
     }
     // Block code - use CodeBlock component
     return <CodeBlock className={props.className}>{String(props.children)}</CodeBlock>;

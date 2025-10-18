@@ -30,11 +30,10 @@ export default async function Home() {
 
             {/* Thin paragraph with strategic bold */}
             <p className="text-sm text-gray-300 leading-relaxed mb-2">
-              <strong className="font-bold">Developer / Designer</strong>
+              <strong className="font-bold">Data Science engineering student</strong>
             </p>
             <p className="text-sm text-gray-400 leading-relaxed mb-8">
-              I build elegant digital experiences and solve complex problems with clean,
-              functional code. <strong className="font-semibold">Currently available</strong> for new projects.
+              passionate about exploring data, building intelligent systems, and learning how technology shapes the world. <strong className="font-semibold">Currently available</strong> for new projects.
             </p>
 
 

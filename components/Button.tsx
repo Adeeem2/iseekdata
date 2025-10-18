@@ -1,11 +1,13 @@
 import Link from 'next/link';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ButtonHTMLAttributes, ReactNode, AnchorHTMLAttributes } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'outline';
   href?: string;
   className?: string;
+  target?: string;
+  rel?: string;
 }
 
 export default function Button({ 
@@ -13,6 +15,8 @@ export default function Button({
   variant = 'primary', 
   href, 
   className = '',
+  target,
+  rel,
   ...props 
 }: ButtonProps) {
   const baseStyles = `
@@ -24,7 +28,7 @@ export default function Button({
   `;
 
   const variants = {
-    primary: 'bg-black border-black text-white hover:bg-gray-800',
+    primary: 'bg-transparent border-emerald-500 text-white hover:bg-emerald-500/10',
     secondary: 'bg-transparent border-emerald-500 text-white hover:bg-emerald-500/10',
     outline: 'bg-white border-black text-black hover:bg-gray-50',
   };
@@ -32,6 +36,21 @@ export default function Button({
   const buttonClass = `${baseStyles} ${variants[variant]}`;
 
   if (href) {
+    // External link
+    if (target === '_blank' || href.startsWith('http')) {
+      return (
+        <a 
+          href={href} 
+          className={buttonClass}
+          target={target || '_blank'}
+          rel={rel || 'noopener noreferrer'}
+        >
+          {children}
+        </a>
+      );
+    }
+    
+    // Internal link
     return (
       <Link href={href} className={buttonClass}>
         {children}

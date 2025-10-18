@@ -9,17 +9,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Your Name - Developer & Designer",
-  description: "Personal portfolio showcasing projects and writings",
-  keywords: ["portfolio", "developer", "designer", "projects"],
-  authors: [{ name: "Your Name" }],
+  title: "isd - HOME",
+  description: "Personal portfolio",
+  keywords: ["portfolio", "machine learning", "ai", "projects"],
+  authors: [{ name: "edam taktek" }],
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://yourname.dev",
-    title: "Your Name - Developer & Designer",
-    description: "Personal portfolio showcasing projects and writings",
-    siteName: "Your Name Portfolio",
+    url: "https://iseekdata.me",
+    title: "isd - HOME",
+    description: "Personal portfolio",
+    siteName: "i seek data",
   },
 };
 

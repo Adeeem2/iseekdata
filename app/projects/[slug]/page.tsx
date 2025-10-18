@@ -87,8 +87,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* Live Link */}
         {project.link && (
           <Button 
-            href={project.link} 
+            href={project.link}
             variant="primary"
+            target="_blank"
             className="inline-flex items-center gap-2"
           >
             View Live Project <ExternalLink className="w-4 h-4" />
