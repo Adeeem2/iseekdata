@@ -24,9 +24,9 @@ export default function Button({
   `;
 
   const variants = {
-    primary: 'bg-black border-black text-white hover:bg-gray-800',
-    secondary: 'bg-white border-black text-black hover:bg-gray-50',
-    outline: 'bg-white border-black text-black hover:bg-gray-50',
+    primary: 'bg-[color:var(--accent)] border-[color:var(--accent)] text-[color:var(--bg)] hover:opacity-90 transition-base',
+    secondary: 'bg-transparent border-base text-[color:var(--fg)] hover:soft transition-base',
+    outline: 'bg-transparent border-[color:var(--accent)] text-[color:var(--accent)] hover:opacity-90 transition-base',
   };
 
   const buttonClass = `${baseStyles} ${variants[variant]}`;

@@ -20,23 +20,22 @@ export default function Card({
 }: CardProps) {
   const content = (
     <div className={`
-      group border border-black p-8
-      transition-all duration-150
-      hover:border-gray-400
+      group card p-8
+      transition-base
+      hover:border-[color:var(--accent)]
       flex flex-col justify-between
-      bg-white
       ${className}
     `}>
       <div>
         {Icon && (
-          <div className="mb-4 p-2 inline-block bg-gray-50 border border-black">
-            <Icon className="w-4 h-4 text-black" />
+          <div className="mb-4 p-2 inline-block border border-base rounded-md">
+            <Icon className="w-4 h-4 text-[color:var(--accent)]" />
           </div>
         )}
-        <h3 className="text-lg font-bold mb-3 text-black group-hover:text-gray-700 transition-colors">
+        <h3 className="text-lg font-bold mb-3 text-[color:var(--fg)] group-hover:text-[color:var(--accent)] transition-base">
           {title}
         </h3>
-        <p className="text-gray-600 text-sm leading-relaxed">
+        <p className="text-muted text-sm leading-relaxed">
           {description}
         </p>
       </div>
@@ -46,7 +45,7 @@ export default function Card({
           {tags.map((tag) => (
             <span 
               key={tag} 
-              className="text-xs px-3 py-1 border border-black text-black font-medium"
+              className="text-xs px-3 py-1 border border-base text-[color:var(--fg)] font-medium rounded-full"
             >
               {tag}
             </span>

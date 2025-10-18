@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPosts } from '@/lib/mdx';
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 
 export const metadata: Metadata = {
   title: 'Posts - Your Name',
@@ -9,6 +10,13 @@ export const metadata: Metadata = {
 
 export default async function Posts() {
   const posts = await getPosts();
+
+  const palette = ['var(--accent-a)', 'var(--accent-b)', 'var(--accent-c)', 'var(--accent-d)', 'var(--accent-e)', 'var(--accent-f)'];
+  const pickAccent = (s: string) => {
+    let sum = 0;
+    for (let i = 0; i < s.length; i++) sum = (sum + s.charCodeAt(i)) % 2147483647;
+    return palette[sum % palette.length];
+  };
 
   return (
     <div className="w-full max-w-content mx-auto px-6 py-12">
@@ -20,29 +28,35 @@ export default async function Posts() {
       </div>
 
       <div className="space-y-8">
-        {posts.map((post) => (
-          <Link 
-            key={post.slug}
-            href={`/posts/${post.slug}`}
-            className="block group"
-          >
-            <article className="border-b border-gray-200 pb-8 hover:border-accent transition-colors">
-              <div className="flex justify-between items-start mb-3">
-                <h2 className="text-2xl font-semibold group-hover:text-accent transition-colors">
-                  {post.title}
-                </h2>
-                <time className="text-sm text-muted whitespace-nowrap ml-4">
-                  {new Date(post.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </time>
-              </div>
-              <p className="text-muted text-lg">{post.excerpt}</p>
-            </article>
-          </Link>
-        ))}
+        {posts.map((post) => {
+          type WithAccent = CSSProperties & { ['--page-accent']?: string };
+          const styleVars: WithAccent = { ['--page-accent']: pickAccent(post.slug) };
+          return (
+            <Link 
+              key={post.slug}
+              href={`/posts/${post.slug}`}
+              className="block group"
+              style={styleVars}
+            >
+              <article className="relative border-b border-base pb-6 transition-base">
+                <div className="flex items-start mb-2">
+                  <span className="mt-2 mr-3 inline-block w-2 h-2" style={{ background: 'var(--page-accent)' }} />
+                  <h2 className="text-xl md:text-2xl font-semibold group-hover:text-[color:var(--accent)] transition-base">
+                    {post.title}
+                  </h2>
+                  <time className="text-xs text-muted whitespace-nowrap ml-auto mt-1">
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                </div>
+                <p className="text-muted text-base">{post.excerpt}</p>
+              </article>
+            </Link>
+          );
+        })}
       </div>
 
       {posts.length === 0 && (
@@ -51,7 +65,7 @@ export default async function Posts() {
             No posts yet. Coming soon!
           </p>
           <p className="text-sm text-muted">
-            Add MDX files to the <code className="bg-gray-100 px-2 py-1 rounded">content/posts</code> folder to see them here.
+            Add MDX files to the <code className="border border-base px-2 py-1">content/posts</code> folder to see them here.
           </p>
         </div>
       )}

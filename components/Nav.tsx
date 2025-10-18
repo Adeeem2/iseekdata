@@ -14,9 +14,9 @@ export default function Nav() {
   const pathname = usePathname();
 
   return (
-    <nav className="w-full max-w-content mx-auto px-8 md:px-12 py-8 border-b border-black">
+    <nav className="w-full max-w-content mx-auto px-8 md:px-12 py-8 border-b border-base">
       <div className="flex justify-between items-center">
-        <Link href="/" className="text-base font-bold text-black hover:text-gray-600 transition-colors">
+        <Link href="/" className="text-base font-bold transition-base hover:text-[color:var(--accent)]">
           Your Name
         </Link>
         
@@ -25,11 +25,12 @@ export default function Nav() {
             <li key={item.path}>
               <Link 
                 href={item.path}
+                aria-current={pathname === item.path ? 'page' : undefined}
                 className={`
-                  text-sm font-medium transition-colors
+                  text-sm font-medium transition-base u-underline
                   ${pathname === item.path 
-                    ? 'text-black' 
-                    : 'text-gray-500 hover:text-black'
+                    ? 'text-[color:var(--fg)]' 
+                    : 'text-muted hover:text-[color:var(--fg)]'
                   }
                 `}
               >

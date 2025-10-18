@@ -4,6 +4,7 @@ import { MDXContent } from '@/components/MDXContent';
 import Button from '@/components/Button';
 import { ExternalLink, ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 
 interface ProjectPageProps {
   params: Promise<{
@@ -42,8 +43,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound();
   }
 
+  const palette = ['var(--accent-a)', 'var(--accent-b)', 'var(--accent-c)', 'var(--accent-d)', 'var(--accent-e)', 'var(--accent-f)'];
+  const pickAccent = (s: string) => {
+    let sum = 0;
+    for (let i = 0; i < s.length; i++) sum = (sum + s.charCodeAt(i)) % 2147483647;
+    return palette[sum % palette.length];
+  };
+  const pageAccent = pickAccent(slug);
+  type WithAccent = CSSProperties & { ['--page-accent']?: string };
+  const styleVars: WithAccent = { ['--page-accent']: pageAccent };
+
   return (
-    <div className="w-full max-w-content mx-auto px-6 py-12">
+    <div className="w-full max-w-content mx-auto px-6 py-12 accent-top" style={styleVars}>
       {/* Back Button */}
       <Button 
         href="/projects" 
@@ -55,9 +66,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </Button>
 
       {/* Project Header */}
-      <header className="mb-12">
-        <h1 className="text-4xl font-bold mb-4">{project.title}</h1>
-        <p className="text-xl text-muted mb-6">{project.description}</p>
+      <header className="mb-10">
+        <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">{project.title}</h1>
+        <p className="text-base text-muted mb-4 max-w-prose">{project.description}</p>
 
         {/* Tags */}
         {project.tags && project.tags.length > 0 && (
@@ -65,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-3 py-1 bg-gray-100 text-muted text-sm rounded-full"
+                className="px-2 py-1 border border-base text-muted text-xs"
               >
                 {tag}
               </span>
@@ -87,7 +98,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Hero Image */}
       {project.image && (
-        <div className="mb-12 rounded-lg overflow-hidden bg-gray-200">
+        <div className="mb-10 border-4 border-base overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={project.image}
@@ -98,9 +109,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       )}
 
       {/* Project Content */}
-      <article className="prose prose-lg max-w-none">
-        <MDXContent source={project.content} />
-      </article>
+      <MDXContent source={project.content} />
     </div>
   );
 }

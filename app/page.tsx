@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import Card from '@/components/Card';
-import Button from '@/components/Button';
 import { getProjects, getPosts } from '@/lib/mdx';
+import { Github, Linkedin, Mail, Twitter } from 'lucide-react';
 
 export default async function Home() {
   const projects = await getProjects();
@@ -12,105 +11,94 @@ export default async function Home() {
   const recentPosts = posts.slice(0, 3);
 
   return (
-    <div className="w-full max-w-content mx-auto px-8 md:px-12 py-16">
+    <div className="w-full mx-auto px-6 md:px-8 py-16 max-w-[680px]">
+      {/* Social media centered */}
+      <div className="w-full flex justify-center mb-6">
+        <div className="flex items-center gap-6 text-muted">
+          <a href="https://github.com/yourusername" aria-label="GitHub" target="_blank" rel="noopener noreferrer" className="transition-base hover:text-[color:var(--accent)]">
+            <Github className="w-5 h-5" />
+          </a>
+          <a href="https://linkedin.com/in/yourusername" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer" className="transition-base hover:text-[color:var(--accent)]">
+            <Linkedin className="w-5 h-5" />
+          </a>
+          <a href="https://twitter.com/yourusername" aria-label="Twitter" target="_blank" rel="noopener noreferrer" className="transition-base hover:text-[color:var(--accent)]">
+            <Twitter className="w-5 h-5" />
+          </a>
+          <a href="mailto:your@email.com" aria-label="Email" className="transition-base hover:text-[color:var(--accent)]">
+            <Mail className="w-5 h-5" />
+          </a>
+        </div>
+      </div>
       {/* Two-column asymmetrical layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         
         {/* Left Column - Narrower, Introduction */}
         <div className="lg:col-span-4">
           <div className="sticky top-8">
             {/* Small badge */}
-            <div className="inline-block mb-6 px-3 py-1 border border-black bg-gray-50">
-              <span className="text-xs font-medium">Portfolio 2025</span>
+            <div className="inline-block mb-6 px-2 py-0.5 border border-base rounded-full">
+              <span className="text-xs font-medium text-muted">Portfolio 2025</span>
             </div>
             
             {/* Large heading */}
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="text-2xl md:text-3xl font-bold mb-3 leading-tight">
               Your Name
             </h1>
             
             {/* Thin paragraph with strategic bold */}
-            <p className="text-base text-gray-700 leading-relaxed mb-2">
-              <strong className="font-bold">Developer / Designer</strong>
+            <p className="text-sm text-muted leading-relaxed mb-1">
+              <strong className="font-bold text-[color:var(--fg)]">Developer / Designer</strong>
             </p>
-            <p className="text-base text-gray-600 leading-relaxed mb-8">
+            <p className="text-sm text-muted leading-relaxed mb-4">
               I build elegant digital experiences and solve complex problems with clean, 
               functional code. <strong className="font-semibold">Currently available</strong> for new projects.
             </p>
             
-            {/* Simple bordered button */}
-            <Button href="/contact" variant="secondary">
-              Get in Touch
-            </Button>
           </div>
         </div>
         
         {/* Right Column - Wider, Stacked Cards */}
-        <div className="lg:col-span-8 space-y-12">
+        <div className="lg:col-span-8 space-y-6">
           
           {/* Projects Section - Card Container */}
-          <section className="border border-black p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold">Selected Projects</h2>
-              <Link 
-                href="/projects" 
-                className="text-sm text-gray-600 hover:text-black border-b border-transparent hover:border-black transition-all"
-              >
-                View all →
-              </Link>
-            </div>
-            
-            <div className="space-y-4">
+          <section className="card p-3">
+            <h2 className="text-lg font-bold mb-3">Projects</h2>
+            <ul className="divide-y divide-[color:var(--border)]">
               {featuredProjects.map((project) => (
-                <Card
-                  key={project.slug}
-                  title={project.title}
-                  description={project.description}
-                  href={`/projects/${project.slug}`}
-                  tags={project.tags}
-                />
+                <li key={project.slug} className="py-1">
+                  <Link 
+                    href={`/projects/${project.slug}`}
+                    className="block transition-base hover:text-[color:var(--accent)]"
+                  >
+                    {project.title}
+                  </Link>
+                </li>
               ))}
-            </div>
-            
+            </ul>
             {featuredProjects.length === 0 && (
-              <p className="text-gray-500 text-center py-8">
+              <p className="text-muted text-center py-8">
                 No projects yet. Check back soon.
               </p>
             )}
           </section>
 
           {/* Posts Section - Card Container */}
-          <section className="border border-black p-8">
-            <h2 className="text-xl font-bold mb-6">Recent Writing</h2>
-            
-            <div className="space-y-6">
+          <section className="card p-3">
+            <h2 className="text-lg font-bold mb-3">Posts</h2>
+            <ul className="divide-y divide-[color:var(--border)]">
               {recentPosts.map((post) => (
-                <Link 
-                  key={post.slug}
-                  href={`/posts/${post.slug}`}
-                  className="block group pb-6 border-b border-gray-200 last:border-0 last:pb-0"
-                >
-                  <article>
-                    <div className="flex justify-between items-start mb-2 gap-4">
-                      <h3 className="text-base font-bold group-hover:text-gray-600 transition-colors flex-1">
-                        {post.title}
-                      </h3>
-                      <time className="text-xs text-gray-500 whitespace-nowrap">
-                        {new Date(post.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </time>
-                    </div>
-                    <p className="text-sm text-gray-600">{post.excerpt}</p>
-                  </article>
-                </Link>
+                <li key={post.slug} className="py-1">
+                  <Link 
+                    href={`/posts/${post.slug}`}
+                    className="block transition-base hover:text-[color:var(--accent)]"
+                  >
+                    {post.title}
+                  </Link>
+                </li>
               ))}
-            </div>
-            
+            </ul>
             {recentPosts.length === 0 && (
-              <p className="text-gray-500 text-center py-8">
+              <p className="text-muted text-center py-8">
                 No posts yet. Coming soon.
               </p>
             )}
