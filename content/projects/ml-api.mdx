@@ -1,0 +1,60 @@
+---
+title: "Machine Learning API"
+description: "RESTful API for image classification and object detection"
+tags: ["Python", "TensorFlow", "Docker", "FastAPI"]
+image: "/images/ml-api.png"
+link: "https://ml-api-demo.com"
+---
+
+## Overview
+
+A production-ready machine learning API that provides image classification and object detection capabilities through a simple REST interface.
+
+## Core Capabilities
+
+- Image classification (1000+ categories)
+- Object detection with bounding boxes
+- Batch processing support
+- Real-time inference
+- Model versioning
+
+## Technical Stack
+
+- **Framework**: FastAPI
+- **ML Library**: TensorFlow 2.x
+- **Models**: ResNet50, YOLO v5
+- **Containerization**: Docker
+- **Deployment**: Kubernetes on GCP
+
+## API Design
+
+```python
+# Image Classification
+POST /api/v1/classify
+Content-Type: multipart/form-data
+
+# Object Detection
+POST /api/v1/detect
+Content-Type: application/json
+```
+
+## Performance
+
+- Average inference time: 150ms
+- Handles 100 requests/second
+- Auto-scaling based on load
+- 99.95% uptime
+
+## Model Training
+
+- Custom dataset of 100K images
+- Transfer learning from ImageNet
+- Accuracy: 94.5%
+- Continuous model retraining pipeline
+
+## Deployment
+
+- Docker containers
+- Kubernetes orchestration
+- Load balancing
+- Monitoring with Prometheus and Grafana

@@ -1,0 +1,13 @@
+# Placeholder for project images
+# Add your project screenshots and images here
+
+Images should be placed in this directory and referenced in your MDX files like:
+
+```mdx
+image: "/images/your-project.png"
+```
+
+Recommended image sizes:
+- Project thumbnails: 800x800px (square)
+- Hero images: 1200x600px
+- Profile photo: 400x400px (square)

@@ -1,0 +1,204 @@
+---
+title: "Building a Minimal Portfolio with Next.js"
+slug: "minimal-portfolio"
+date: "2025-10-13"
+excerpt: "A comprehensive guide on designing and deploying a minimal static portfolio with Next.js, Tailwind CSS, and modern best practices."
+---
+
+## Introduction
+
+In today's digital age, having a strong online presence is crucial for developers and designers. A personal portfolio website serves as your digital business card, showcasing your skills, projects, and personality to potential employers and clients.
+
+In this guide, I'll walk you through building a minimal, performant portfolio website using Next.js 14 and Tailwind CSS.
+
+## Why Next.js?
+
+Next.js has become the go-to framework for modern web applications due to its:
+
+- **Performance**: Built-in optimizations for images, fonts, and code splitting
+- **SEO**: Server-side rendering and static generation support
+- **Developer Experience**: Fast refresh, TypeScript support, and intuitive routing
+- **Flexibility**: Can be deployed anywhere from Vercel to self-hosted servers
+
+## Design Philosophy
+
+When designing a portfolio, less is often more. Here are the key principles I followed:
+
+### 1. Whitespace is Your Friend
+
+Generous spacing makes content more readable and gives your work room to breathe. Don't be afraid of empty space.
+
+### 2. Typography Matters
+
+Choose a clean, modern font. I used Inter for its excellent readability and professional appearance.
+
+### 3. Consistent Layout
+
+Use a grid system and maintain consistent spacing throughout. Square cards create a clean, geometric aesthetic.
+
+### 4. Performance First
+
+Every design decision should consider performance. Use Next.js Image for optimization, implement lazy loading, and minimize JavaScript.
+
+## Technical Implementation
+
+### Setting Up Next.js
+
+```bash
+npx create-next-app@latest my-portfolio --typescript --tailwind --app
+```
+
+This command sets up a Next.js project with:
+- TypeScript for type safety
+- Tailwind CSS for styling
+- App Router for modern routing
+
+### Project Structure
+
+```
+my-portfolio/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── about/
+│   ├── projects/
+│   └── contact/
+├── components/
+│   ├── Card.tsx
+│   ├── Nav.tsx
+│   └── Footer.tsx
+├── content/
+│   ├── projects/
+│   └── posts/
+└── lib/
+    └── mdx.ts
+```
+
+### Content Management with MDX
+
+MDX allows you to write content in Markdown with React components. It's perfect for portfolios because:
+
+- Easy to write and maintain
+- Supports frontmatter for metadata
+- Can include interactive components
+- Version control friendly
+
+### Styling with Tailwind
+
+Tailwind CSS enables rapid development with utility classes:
+
+```tsx
+<div className="max-w-content mx-auto px-6 py-12">
+  <h1 className="text-4xl font-bold mb-4">
+    Welcome
+  </h1>
+</div>
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+Vercel offers the best Next.js deployment experience:
+
+1. Push your code to GitHub
+2. Import project in Vercel
+3. Deploy with one click
+
+### Other Options
+
+- **Netlify**: Great alternative with similar simplicity
+- **AWS**: More control, requires more configuration
+- **Self-hosted**: Full control but more maintenance
+
+## Performance Optimization
+
+### Image Optimization
+
+Use Next.js Image component:
+
+```tsx
+import Image from 'next/image';
+
+<Image
+  src="/profile.jpg"
+  alt="Profile"
+  width={400}
+  height={400}
+  priority
+/>
+```
+
+### Static Generation
+
+Pre-render pages at build time:
+
+```tsx
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map(project => ({
+    slug: project.slug
+  }));
+}
+```
+
+### Code Splitting
+
+Next.js automatically splits code by route, but you can also use dynamic imports:
+
+```tsx
+const Component = dynamic(() => import('./Component'));
+```
+
+## SEO Best Practices
+
+### Metadata
+
+```tsx
+export const metadata: Metadata = {
+  title: 'Your Name - Developer',
+  description: 'Personal portfolio...',
+  openGraph: {
+    title: 'Your Name',
+    description: '...',
+    images: ['/og-image.png']
+  }
+};
+```
+
+### Semantic HTML
+
+Use proper HTML elements for better accessibility and SEO:
+
+```tsx
+<article>
+  <h1>Title</h1>
+  <time>Date</time>
+  <p>Content</p>
+</article>
+```
+
+## Accessibility
+
+Make your portfolio accessible to everyone:
+
+- Use semantic HTML
+- Include alt text for images
+- Ensure keyboard navigation works
+- Maintain sufficient color contrast
+- Test with screen readers
+
+## Conclusion
+
+Building a portfolio doesn't have to be complicated. With Next.js and Tailwind CSS, you can create a fast, beautiful, and maintainable portfolio that showcases your work effectively.
+
+The key is to focus on simplicity, performance, and content. Let your work speak for itself.
+
+## Resources
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com)
+- [MDX](https://mdxjs.com)
+- [Web.dev Performance Guide](https://web.dev/performance)
+
+Happy building! 🚀

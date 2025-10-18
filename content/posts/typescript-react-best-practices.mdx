@@ -1,0 +1,305 @@
+---
+title: "TypeScript Best Practices for React Development"
+slug: "typescript-react-best-practices"
+date: "2025-09-28"
+excerpt: "Learn essential TypeScript patterns and best practices for building robust React applications with type safety and better developer experience."
+---
+
+## Introduction
+
+TypeScript has become the standard for professional React development. It catches errors at compile time, improves code documentation, and enhances the developer experience with excellent IDE support.
+
+In this article, I'll share the best practices I've learned while building production React applications with TypeScript.
+
+## Component Props
+
+### Define Props Interfaces
+
+Always define explicit interfaces for component props:
+
+```tsx
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary';
+  disabled?: boolean;
+}
+
+export const Button = ({ 
+  children, 
+  onClick, 
+  variant = 'primary',
+  disabled = false 
+}: ButtonProps) => {
+  return (
+    <button 
+      onClick={onClick}
+      disabled={disabled}
+      className={`btn-${variant}`}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+### Use React.FC Sparingly
+
+Modern React TypeScript doesn't require `React.FC`:
+
+```tsx
+// Prefer this
+const Component = ({ title }: { title: string }) => {
+  return <h1>{title}</h1>;
+};
+
+// Over this
+const Component: React.FC<{ title: string }> = ({ title }) => {
+  return <h1>{title}</h1>;
+};
+```
+
+## State Management
+
+### Type Your State
+
+```tsx
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const [user, setUser] = useState<User | null>(null);
+const [loading, setLoading] = useState<boolean>(false);
+const [error, setError] = useState<Error | null>(null);
+```
+
+### Discriminated Unions for Complex State
+
+```tsx
+type AsyncState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; error: Error };
+
+const [state, setState] = useState<AsyncState<User>>({ 
+  status: 'idle' 
+});
+```
+
+## Event Handlers
+
+### Type Event Handlers Correctly
+
+```tsx
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log(e.target.value);
+};
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  // handle submit
+};
+
+const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // handle click
+};
+```
+
+## Hooks
+
+### Custom Hooks with TypeScript
+
+```tsx
+function useLocalStorage<T>(
+  key: string, 
+  initialValue: T
+): [T, (value: T) => void] {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T) => {
+    try {
+      setStoredValue(value);
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue, setValue];
+}
+```
+
+### Generic Hooks
+
+```tsx
+function useAsync<T>() {
+  const [state, setState] = useState<AsyncState<T>>({ 
+    status: 'idle' 
+  });
+
+  const execute = async (promise: Promise<T>) => {
+    setState({ status: 'loading' });
+    try {
+      const data = await promise;
+      setState({ status: 'success', data });
+    } catch (error) {
+      setState({ status: 'error', error: error as Error });
+    }
+  };
+
+  return { state, execute };
+}
+```
+
+## Context API
+
+### Typed Context
+
+```tsx
+interface AuthContextType {
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
+```
+
+## API Calls
+
+### Type API Responses
+
+```tsx
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+}
+
+async function fetchUser(id: number): Promise<User> {
+  const response = await fetch(`/api/users/${id}`);
+  const result: ApiResponse<User> = await response.json();
+  return result.data;
+}
+```
+
+### Zod for Runtime Validation
+
+```tsx
+import { z } from 'zod';
+
+const UserSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  email: z.string().email(),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+async function fetchUser(id: number): Promise<User> {
+  const response = await fetch(`/api/users/${id}`);
+  const data = await response.json();
+  return UserSchema.parse(data);
+}
+```
+
+## Utility Types
+
+### Essential TypeScript Utilities
+
+```tsx
+// Partial - all properties optional
+type PartialUser = Partial<User>;
+
+// Required - all properties required
+type RequiredUser = Required<User>;
+
+// Pick - select specific properties
+type UserPreview = Pick<User, 'id' | 'name'>;
+
+// Omit - exclude specific properties
+type UserWithoutEmail = Omit<User, 'email'>;
+
+// Record - object with specific key-value types
+type UserMap = Record<number, User>;
+```
+
+## Common Pitfalls
+
+### 1. Any Type
+
+Avoid `any` at all costs. Use `unknown` instead:
+
+```tsx
+// Bad
+const data: any = await fetchData();
+
+// Good
+const data: unknown = await fetchData();
+if (isUser(data)) {
+  // Now data is typed as User
+}
+```
+
+### 2. Type Assertions
+
+Use type guards instead of assertions:
+
+```tsx
+// Bad
+const user = data as User;
+
+// Good
+function isUser(obj: unknown): obj is User {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'id' in obj &&
+    'name' in obj
+  );
+}
+```
+
+### 3. Optional Chaining Overuse
+
+Be explicit about nullability:
+
+```tsx
+// Less clear
+const name = user?.profile?.name;
+
+// More clear
+const name = user?.profile?.name ?? 'Anonymous';
+```
+
+## Conclusion
+
+TypeScript transforms React development by catching errors early and improving code quality. These best practices will help you write more maintainable and robust applications.
+
+Remember: TypeScript is a tool to help you, not restrict you. Use it to express your intent and make your code more understandable.
+
+## Resources
+
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Total TypeScript](https://www.totaltypescript.com/)
