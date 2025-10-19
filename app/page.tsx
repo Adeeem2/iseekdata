@@ -46,7 +46,7 @@ export default async function Home() {
           {/* Projects Section - Minimalist Box with Neon Border */}
           <section className="border-2 border-emerald-500 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold text-white">Projects</h2>
+              <h2 className="text-base font-bold !text-white">Projects</h2>
 
             </div>
             
@@ -55,7 +55,7 @@ export default async function Home() {
                 <li key={project.slug}>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="block py-1 text-sm text-gray-300 hover:text-white transition-colors"
+                    className="block py-1 text-sm !text-gray-300 hover:!text-white transition-colors"
                   >
                     {project.title}
                   </Link>
@@ -64,7 +64,7 @@ export default async function Home() {
             </ul>
 
             {featuredProjects.length === 0 && (
-              <p className="text-gray-600 text-center py-6 text-sm">
+              <p className="!text-gray-600 text-center py-6 text-sm">
                 No projects yet. Check back soon.
               </p>
             )}
@@ -73,7 +73,7 @@ export default async function Home() {
           {/* Posts Section - Minimalist Box with Neon Border */}
           <section className="border-2 border-emerald-500 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-base font-bold text-white">Posts</h2>
+              <h2 className="text-base font-bold !text-white">Posts</h2>
 
             </div>
 
@@ -82,7 +82,7 @@ export default async function Home() {
                 <li key={post.slug}>
                   <Link
                     href={`/posts/${post.slug}`}
-                    className="block py-1 text-sm text-gray-300 hover:text-white transition-colors"
+                    className="block py-1 text-sm !text-gray-300 hover:!text-white transition-colors"
                   >
                     {post.title}
                   </Link>
@@ -91,7 +91,7 @@ export default async function Home() {
             </ul>
 
             {recentPosts.length === 0 && (
-              <p className="text-gray-600 text-center py-6 text-sm">
+              <p className="!text-gray-600 text-center py-6 text-sm">
                 No posts yet. Coming soon.
               </p>
             )}
