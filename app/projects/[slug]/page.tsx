@@ -67,8 +67,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Project Header */}
       <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight">{project.title}</h1>
-        <p className="text-base text-muted mb-4 max-w-prose">{project.description}</p>
+        <h1 className="text-3xl md:text-4xl font-bold mb-3 leading-tight text-white">{project.title}</h1>
+        <p className="text-base text-gray-400 mb-4 max-w-prose">{project.description}</p>
 
         {/* Tags */}
         {project.tags && project.tags.length > 0 && (
@@ -76,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-1 border border-base text-muted text-xs"
+                className="px-2 py-1 border border-gray-700 text-gray-400 text-xs"
               >
                 {tag}
               </span>

@@ -56,15 +56,15 @@ export default async function PostPage({ params }: PostPageProps) {
 
       {/* Post Header */}
       <header className="mb-12">
-        <time className="text-sm text-muted mb-4 block">
+        <time className="text-sm text-gray-400 mb-4 block">
           {new Date(post.date).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           })}
         </time>
-        <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-        <p className="text-xl text-muted">{post.excerpt}</p>
+        <h1 className="text-4xl font-bold mb-4 text-white">{post.title}</h1>
+        <p className="text-xl text-gray-400">{post.excerpt}</p>
       </header>
 
       {/* Post Content */}

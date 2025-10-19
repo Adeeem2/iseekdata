@@ -45,12 +45,11 @@ export default function CodeBlock({ children, className }: CodeBlockProps) {
       </div>
 
       {/* Code content */}
-      <pre className="bg-gray-900 text-gray-100 p-4 rounded-b-lg overflow-x-auto border-2 border-t-0 border-emerald-500 m-0">
-        <code className={`text-sm font-mono leading-relaxed ${className}`}>
+      <pre className="!bg-gray-900 !text-gray-100 p-4 rounded-b-lg overflow-x-auto border-2 border-t-0 border-emerald-500 m-0" style={{ backgroundColor: '#111827', color: '#f3f4f6' }}>
+        <code className={`text-sm font-mono leading-relaxed ${className}`} style={{ color: '#f3f4f6' }}>
           {children}
         </code>
       </pre>
     </div>
   );
 }
-
