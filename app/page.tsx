@@ -18,7 +18,7 @@ export default async function Home() {
         <div className="lg:col-span-4">
           <div className="sticky top-8">
             {/* Logo */}
-            <div className="inline-block mb-4 px-2 py-1 border-2  border-emerald-500 ">
+            <div className="inline-block mb-4 px-2 py-1 border-3 rounded-sm  border-emerald-500 ">
               <span className="text-sm font-bold font-mono text-white">i seek data</span>
               <br/>
             </div>
@@ -44,7 +44,7 @@ export default async function Home() {
         <div className="lg:col-span-8 space-y-8 lg:mt-24">
 
           {/* Projects Section - Minimalist Box with Neon Border */}
-          <section className="border-2 border-emerald-500 p-6">
+          <section className="border-3 rounded-sm border-emerald-500 p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-base font-bold !text-white">Projects</h2>
 
@@ -71,7 +71,7 @@ export default async function Home() {
           </section>
 
           {/* Posts Section - Minimalist Box with Neon Border */}
-          <section className="border-2 border-emerald-500 p-6">
+          <section className="border-3 rounded-sm border-emerald-500 p-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-base font-bold !text-white">Posts</h2>
 
