@@ -2,7 +2,7 @@
 title: "ENET'Com Docs - Academic Resource Platform"
 description: "A comprehensive academic archive platform for ENET'Com Sfax students featuring course materials, study tools, and a modern dark mode interface"
 tags: ["Education", "Web Development", "JavaScript"]
-link: "https://enetcomdocs.tn"
+link: "https://enetcom-docs.vercel.app/"
 ---
 
 <hr />
@@ -13,182 +13,70 @@ ENET'Com Docs is a centralized academic resource platform I built to help studen
 
 What started as a simple idea to organize scattered course materials evolved into a full-featured platform with Google Drive integration, a built-in Pomodoro timer, study music player, and an eye-friendly dark mode with animated galaxy background. The platform is fully responsive and optimized for mobile devices, where most students access their materials.
 
+<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+  <div style={{ maxWidth: '640px', margin: '0 auto', aspectRatio: '640/331', overflow: 'hidden', borderRadius: '8px' }}>
+    <img src="/images/enetdocs-demo.gif" alt="ENET'Com Docs platform demo" style={{ width: '100%', height: '109%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
+  </div>
+</div>
+
 ### Key Technical Achievements
 
-**Google Drive API Integration** - Implemented seamless file fetching from Google Drive using service account authentication:
+**The Challenge: From Google Drive to Dynamic Web Content**
+
+The main challenge was transforming scattered Google Drive folders into an organized, accessible platform. I solved this through a two-phase approach:
+
+**Phase 1: Python Scraper - Drive to JSON**
+
+I built a Python scraper using the Google Drive API to recursively fetch all course folders and convert them into structured JSON files:
+
+```python
+# Fetching and structuring drive data into JSON
+def fetch_folder_structure(folder_id, service):
+    files = service.files().list(
+        q=f"'{folder_id}' in parents",
+        fields="files(id, name, mimeType, webViewLink)"
+    ).execute()
+    return files.get('files', [])
+```
+
+Each program (GEC, GT, GII, IDSD, LTIC) got its own JSON file with the complete folder hierarchy, file names, and shareable links. This eliminated the need for real-time API calls on the frontend, drastically improving load times.
+
+**Phase 2: JavaScript Renderer - JSON to Interactive UI**
+
+The frontend dynamically renders these JSON files into an interactive file browser:
 
 ```javascript
-async function fetchDriveFiles(folderId) {
-    const API_KEY = 'YOUR_API_KEY';
-    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType,webViewLink)`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data.files || [];
-    } catch (error) {
-        console.error('Error fetching files:', error);
-        return [];
-    }
-}
+// Loading and rendering JSON data
+fetch('js/GEC_1st_Year.json')
+    .then(response => response.json())
+    .then(data => renderFileStructure(data));
 ```
 
-**Dynamic Theme System** - Created a persistent dark/light mode using CSS custom properties and localStorage:
+<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+  <div style={{ maxWidth: '640px', margin: '0 auto', aspectRatio: '640/331', overflow: 'hidden', borderRadius: '8px' }}>
+    <img src="/images/enetdocs-darkmode.gif" alt="Dark mode toggle demonstration" style={{ width: '100%', height: '109%', objectFit: 'cover', objectPosition: 'top', display: 'block' }} />
+  </div>
+</div>
 
-```javascript
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const currentTheme = localStorage.getItem('theme') || 'light';
+**Additional Features**
 
-if (currentTheme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    themeToggleBtn.innerHTML = '<i class="fa-regular fa-sun"></i>';
-}
-
-themeToggleBtn.addEventListener('click', function() {
-    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-});
-```
-
-```css
-:root {
-    --bg-color: #ffffff;
-    --text-color: #333333;
-    --primary-color: #0056b3;
-}
-
-[data-theme="dark"] {
-    --bg-color: #0f0f2a;
-    --text-color: #e0e0e0;
-    --primary-color: #4a8fe7;
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
-}
-```
-
-**Animated Galaxy Background** - Built a performant canvas-based particle system that activates only in dark mode:
-
-```javascript
-const canvas = document.getElementById('galaxy-bg');
-const ctx = canvas.getContext('2d');
-let particles = [];
-
-function createParticles(num) {
-    particles = [];
-    for (let i = 0; i < num; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: Math.random() * 1.8 + 0.7,
-            dx: (Math.random() - 0.5) * 0.3,
-            dy: (Math.random() - 0.5) * 0.3,
-            color: `rgba(${180+Math.random()*75},${180+Math.random()*75},255,${0.3+Math.random()*0.7})`
-        });
-    }
-}
-
-function animateGalaxy() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-        ctx.fillStyle = p.color;
-        ctx.shadowBlur = 8;
-        ctx.fill();
-
-        p.x += p.dx;
-        p.y += p.dy;
-
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-    });
-    requestAnimationFrame(animateGalaxy);
-}
-```
-
-**Pomodoro Timer with Music Integration** - Developed a productivity timer with state management and audio playback:
-
-```javascript
-let workTime = 25 * 60;
-let breakTime = 5 * 60;
-let timeLeft = workTime;
-let isRunning = false;
-
-function updateDisplay() {
-    const min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-    const sec = String(timeLeft % 60).padStart(2, '0');
-    document.getElementById('timer-display').textContent = `${min}:${sec}`;
-}
-
-function startTimer() {
-    if (isRunning) return;
-    isRunning = true;
-    document.getElementById('start-btn').textContent = 'Pause';
-
-    timer = setInterval(() => {
-        if (timeLeft > 0) {
-            timeLeft--;
-            updateDisplay();
-        } else {
-            clearInterval(timer);
-            isRunning = false;
-            // Switch between work and break
-            isWork = !isWork;
-            timeLeft = isWork ? workTime : breakTime;
-            updateDisplay();
-        }
-    }, 1000);
-}
-```
-
-**Responsive Mobile Navigation** - Implemented smooth slide-in navigation with touch-friendly interactions:
-
-```css
-@media (max-width: 768px) {
-    nav {
-        position: absolute;
-        background-color: white;
-        border-radius: 0.75rem;
-        min-width: 220px;
-        width: 70vw;
-        right: 10px;
-        top: 60px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        opacity: 0;
-        transform: translateY(-20px) scale(0.98);
-        transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1),
-                    transform 0.35s cubic-bezier(0.4,0,0.2,1);
-        pointer-events: none;
-    }
-
-    nav.active {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
-    }
-}
-```
+- **Dark Mode System**: Built with CSS custom properties and localStorage for persistence across sessions
+- **Animated Galaxy Background**: Canvas-based particle system that activates in dark mode for an immersive experience
+- **Pomodoro Timer**: Integrated productivity tool with music player to help students during study sessions
+- **Responsive Design**: Mobile-first approach with smooth animations and touch-friendly navigation
 
 ### Impact & Results
 
-The platform has become an essential tool for ENET'Com students, with approximately **70% of traffic coming from mobile devices**. The dark mode feature is used by **45% of users**, and the average session duration exceeds **8 minutes**, indicating strong engagement with the content.
-
-Performance metrics show a **Lighthouse score of 90+** across performance, accessibility, and best practices categories. The Google Drive API integration provides access to **100+ course folders** organized across 3 academic years for each of the 5 engineering programs.
+The platform has become an essential tool for ENET'Com students, serving **100+ course folders** organized across 3 academic years for 5 engineering programs. With **70% mobile traffic** and an average session duration exceeding **8 minutes**, the platform demonstrates strong user engagement. The pre-generated JSON approach achieved **Lighthouse scores of 90+** across all metrics.
 
 ### Technologies Used
 
-- **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3
-- **APIs**: Google Drive API v3
-- **Styling**: CSS Custom Properties, Flexbox, Grid
-- **Animation**: Canvas API, requestAnimationFrame
-- **Audio**: HTML5 Audio API
-- **Icons**: Font Awesome 6
+- **Backend**: Python with Google Drive API v3 for scraping and JSON generation
+- **Frontend**: JavaScript, HTML5, CSS3
+- **Data Architecture**: JSON-based static file serving for optimal performance
+- **Styling**: CSS Custom Properties for theming
+- **Deployment**: Vercel
 
-This project demonstrates my ability to build scalable, performant web applications that solve real-world problems while maintaining clean code architecture and excellent user experience. The platform continues to serve hundreds of students and receives positive feedback for its intuitive design and helpful features.
+### Key Takeaways
+
+This project demonstrates the power of combining Python for data processing with vanilla JavaScript for frontend rendering. By pre-processing Drive data into JSON files, I achieved fast load times without sacrificing functionality. The platform continues to serve hundreds of students and receives positive feedback for its intuitive design and helpful features.

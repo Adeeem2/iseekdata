@@ -54,7 +54,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const styleVars: WithAccent = { ['--page-accent']: pageAccent };
 
   return (
-    <div className="w-full max-w-content mx-auto px-6 py-12" style={styleVars}>
+    <div className="w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto px-6 md:px-12 lg:px-20 py-12" style={styleVars}>
       {/* Back Button */}
       <Button 
         href="/"

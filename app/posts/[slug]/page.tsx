@@ -43,7 +43,7 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   return (
-    <div className="w-full max-w-content mx-auto px-6 py-12">
+    <div className="w-full max-w-3xl lg:max-w-4xl mx-auto px-6 md:px-12 lg:px-20 py-12">
       {/* Back Button */}
       <Button 
         href="/"

@@ -44,6 +44,11 @@ const components = {
   blockquote: (props: ComponentProps) => (
     <blockquote className="border-l-4 border-accent pl-4 italic my-4" {...props} />
   ),
+  img: (props: ComponentProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img className="max-w-full h-auto rounded-lg my-6" {...props} alt={props.alt as string || ''} />
+  ),
+  div: (props: ComponentProps) => <div {...props} />,
 };
 
 export function MDXContent({ source }: { source: string }) {

@@ -5,151 +5,135 @@ tags: ["Flask", "MongoDB", "Google Drive API", "Python"]
 
 ---
 
-<hr></hr>
+<hr/>
 
-## Overview
+## Project Overview
 
-ENET'Com Academic Archive is a comprehensive web application designed to streamline the management of academic resources for the ENET'Com institution. The project combines Flask, MongoDB, and Google Drive API to create a robust system for organizing and accessing educational materials across multiple programs, years, and semesters.
+The ENET'Com Academic Archive System is a comprehensive web-based platform designed to manage and organize academic documents for engineering students. This system bridges the gap between Google Drive storage and a structured database, providing students with an intuitive interface to access course materials organized by program, year, semester, and subject.
 
-## The Problem
+## Architecture & Technology Stack
 
-Educational institutions often struggle with organizing and managing vast amounts of academic content spread across different programs and years. Students need an efficient way to browse, search, and access course materials, documents, and resources without getting lost in complex folder structures.
+The project is built on a modern Python web stack, leveraging **Flask** as the web framework, **MongoDB** for flexible document storage, and the **Google Drive API** for seamless integration with cloud storage. The architecture follows a three-tier model: a presentation layer with HTML templates, a business logic layer handling data processing and API interactions, and a persistence layer using MongoDB for hierarchical data management.
+<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+  <img src="/images/enetdocsdb.gif" alt="Admin panel for managing academic files" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', display: 'inline-block' }} />
+</div>
 
-## The Solution
+### Key Components
 
-This application provides a centralized platform that:
+**Backend Framework**: The Flask application (`app.py`) serves as the core engine, providing RESTful endpoints for data retrieval and CRUD operations. It manages routing, query parameter handling, and database interactions through PyMongo.
 
-- **Automatically scrapes and organizes** Google Drive folders containing academic materials
-- **Stores hierarchical data** in MongoDB for fast querying and retrieval
-- **Provides an intuitive admin interface** for managing content without touching code
-- **Supports multiple academic programs** (IDSD, GII, GT, GEC) across different years and semesters
-- **Maintains file hierarchy** while providing easy navigation and search capabilities
+**Google Drive Integration**: The `driveapi.py` module handles authentication and communication with Google Drive's API, enabling the system to fetch file metadata, generate shareable links, and maintain synchronization between the cloud storage and local database.
 
-## Key Features
+**Data Scraping Pipeline**: The `scrapers.py` module implements intelligent traversal algorithms that recursively explore Google Drive folder structures, extracting file metadata and organizing it into a hierarchical JSON format.
 
-### 1. Google Drive Integration
+**Admin Interface**: A dedicated admin panel (`admin_server.py` and `admin.html`) provides authorized users with tools to manage the document database, update entries, and maintain data consistency.
 
-The application seamlessly connects to Google Drive to fetch and organize academic files. It intelligently processes folder structures and maintains metadata about each file.
+## Database Structure & Organization
 
-```python
-def get_file_link(file_id, mime_type):
-    """Generate a direct link to a Google Drive file based on its ID and MIME type."""
-    if "folder" in mime_type:
-        return f"https://drive.google.com/drive/folders/{file_id}"
-    else:
-        return f"https://drive.google.com/file/d/{file_id}/view?usp=drive_link"
+The MongoDB database (`academic_files`) uses a single collection (`files`) with a carefully designed schema that supports hierarchical organization. Each document represents either a folder or a file, with fields that capture both the Google Drive metadata and the academic context.
+
+### Document Schema
+
+Documents in the MongoDB collection follow a consistent structure with the following key fields:
+
+- **program**: Identifies the engineering program (e.g., "GII", "IDSD", "GT", "GEC")
+- **year**: Integer representing the academic year (1, 2, or 3)
+- **semester**: Indicates the academic semester
+- **name**: The file or folder name as it appears in Google Drive
+- **id**: The unique Google Drive identifier
+- **link**: The shareable URL for accessing the resource
+- **is_folder**: Boolean flag distinguishing folders from files
+- **parent_id**: Reference to the parent folder, enabling tree traversal
+- **level**: Integer indicating the depth in the hierarchy (0 for semesters, 1+ for nested items)
+- **mimeType**: The MIME type from Google Drive (e.g., "application/pdf", "application/vnd.google-apps.folder")
+- **icon**: Font Awesome icon class for UI representation
+
+
+<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+  <img src="/images/mongodb_enetdocs.gif" alt="MongoDB Compass showing JSON document structure" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', display: 'inline-block' }} />
+</div>
+
+
+### Hierarchical Organization
+
+The system implements a multi-level hierarchy where:
+
+**Level 0**: Top-level semester folders serve as entry points
+**Level 1**: Subject folders or standalone files within semesters
+**Level 2+**: Nested subfolders and files within subjects
+
+This structure is enforced through the `parent_id` relationship and maintained by indexes on `(program, year, semester)`, `(parent_id)`, and `(is_folder)` for optimal query performance.
+
+## JSON Data Format
+
+The static JSON files stored in `static/data/` provide a cached, denormalized view of the database optimized for frontend consumption. Each file (e.g., `GII_2nd_Year.json`) contains a complete snapshot of documents for a specific program and year combination.
+
+Here's a representative sample of the JSON structure:
+
+```json
+{
+  "subject": "semester 1",
+  "id": "1YgYlTOU_EU7zpMExKDFO1WCfOiANPVpl",
+  "link": "https://drive.google.com/drive/u/0/folders/...",
+  "files": [],
+  "subfolders": [
+    {
+      "name": "reseau",
+      "id": "1LpcWGByYkp6pLY_KQ4dPU56s-P3cTJDa",
+      "mimeType": "application/vnd.google-apps.folder",
+      "link": "https://drive.google.com/drive/folders/...",
+      "icon": "fas fa-folder",
+      "files": [
+        {
+          "name": "TD Reseaux Informatiques.pdf",
+          "id": "1eCb8Ll_Bl5WDaHiAvkgBZ4Ja-AOryOhR",
+          "mimeType": "application/pdf",
+          "link": "https://drive.google.com/file/d/...",
+          "icon": "fas fa-file-pdf"
+        }
+      ],
+      "subfolders": []
+    }
+  ]
+}
 ```
 
-### 2. MongoDB Database Architecture
+This nested structure mirrors the folder hierarchy in Google Drive while adding metadata like icons for rich UI rendering. The `mimeType` field drives the icon selection logic, allowing the frontend to display appropriate visual indicators for PDFs, folders, documents, and other file types.
 
-The application uses MongoDB to store a flexible document structure that represents the hierarchical nature of academic content. Each document contains program, year, semester, and file metadata.
+## Data Processing Workflow
 
-```python
-client = MongoClient('mongodb://localhost:27017/')
-db = client['academic_files']
-collection = db['files']
+The system employs a sophisticated data pipeline that transforms raw Google Drive API responses into structured, queryable documents:
 
-# Query with filters
-query = {}
-if program:
-    query['program'] = program
-if year and year.isdigit():
-    query['year'] = int(year)
-if semester:
-    query['semester'] = semester
+1. **Discovery Phase**: The scraper authenticates with Google Drive API and traverses the folder hierarchy starting from root semester folders
+2. **Metadata Extraction**: For each item, the system captures essential attributes (name, ID, MIME type) and generates shareable links
+3. **Hierarchical Mapping**: Items are organized into a parent-child relationship with level tracking
+4. **Database Persistence**: Documents are inserted into MongoDB with appropriate indexes
+5. **JSON Export**: Aggregated data is serialized to static JSON files for fast client-side access
 
-entries = list(collection.find(query).sort([('is_folder', -1), ('level', 1), ('name', 1)]))
-```
+## File Organization Strategy
 
-### 3. Smart File Icon Detection
+The project uses a clean separation of concerns in its file structure:
 
-The system automatically assigns appropriate icons to different file types, making the interface more intuitive and visually appealing.
+**Core Application Files**: `app.py` handles web requests, `driveapi.py` manages external API calls, and `scrapers.py` processes data
+**Templates**: HTML files in `templates/` follow a base template pattern with specialized views for listing, editing, and adding entries
+**Static Assets**: The `static/data/` directory contains JSON snapshots organized by program and year
+**Configuration**: `docker-compose.yml` defines the MongoDB containerization setup for easy deployment
 
-```python
-def get_file_icon(mime_type, name):
-    """Determine the appropriate Font Awesome icon based on file type."""
-    _, ext = os.path.splitext(name.lower())
+## Technical Highlights
 
-    if ext in ['.pdf']:
-        return "fas fa-file-pdf"
-    elif ext in ['.py']:
-        return "fab fa-python"
-    elif ext in ['.java']:
-        return "fab fa-java"
-    # ... and more file types
-```
+**Recursive Folder Traversal**: The scraper implements depth-first traversal to handle arbitrarily nested Google Drive structures
 
-### 4. Admin Interface
+**Caching Strategy**: Static JSON files reduce database load and API calls, while maintaining data freshness through periodic updates
 
-A user-friendly admin panel allows authorized users to:
-- View and edit JSON configuration files
-- Add new academic entries
-- Manage Google Drive folder links
-- Organize content by section, year, and semester
+**Query Optimization**: MongoDB indexes on frequently-filtered fields ensure sub-millisecond query response times even with thousands of documents
 
-### 5. RESTful API
+**Icon Mapping**: Intelligent MIME type detection automatically assigns contextual icons, enhancing user experience without manual configuration
 
-The Flask backend provides clean API endpoints for querying and managing academic resources:
+## Deployment Considerations
 
-```python
-@app.route('/list')
-def list_entries():
-    program = request.args.get('program', '')
-    year = request.args.get('year', '')
-    semester = request.args.get('semester', '')
-
-    programs = collection.distinct('program')
-    years = sorted(collection.distinct('year'))
-    semesters = sorted(collection.distinct('semester'))
-
-    return render_template('index.html',
-                          programs=programs,
-                          years=years,
-                          semesters=semesters)
-```
-
-## Technical Stack
-
-- **Backend**: Flask (Python web framework)
-- **Database**: MongoDB (NoSQL document database)
-- **External API**: Google Drive API for file management
-- **Frontend**: HTML templates with Jinja2 templating
-- **Containerization**: Docker Compose for easy deployment
-
-## Project Structure
-
-The application follows a clean, modular architecture:
-
-- `app.py` - Main Flask application with routing and database queries
-- `scrapers.py` - Google Drive scraping functionality
-- `driveapi.py` - Google Drive API integration
-- `admin_server.py` - Admin interface server
-- `import_data.py` - Data import and migration utilities
-- `templates/` - HTML templates for the web interface
-- `static/data/` - JSON files for each program and year
-
-## Challenges & Learning
-
-Building this project involved several interesting challenges:
-
-1. **Hierarchical Data Modeling**: Designing a MongoDB schema that efficiently represents nested folder structures while maintaining query performance
-2. **Google Drive API Integration**: Handling API rate limits and authentication while scraping large folder structures
-3. **Dynamic Filtering**: Creating a flexible query system that allows filtering by multiple parameters
-4. **Data Consistency**: Ensuring synchronization between JSON files and MongoDB documents
+The application is containerized using Docker Compose, with MongoDB running in an isolated container. This approach ensures consistency across development and production environments while simplifying database management and backup procedures.
 
 ## Future Enhancements
 
-- Implement user authentication and role-based access control
-- Add full-text search across all documents
-- Create a mobile-responsive frontend interface
-- Implement caching for frequently accessed resources
-- Add analytics to track most accessed materials
-
-## Deployment
-
-The application can be easily deployed using Docker Compose, making it simple to set up in any environment with minimal configuration.
-
----
-
-This project demonstrates proficiency in building full-stack web applications with Python, working with NoSQL databases, integrating third-party APIs, and creating maintainable, scalable code architectures.
+Potential improvements include implementing full-text search across document names, adding user authentication with role-based access control, and developing a real-time synchronization mechanism to automatically detect changes in Google Drive and update the database accordingly.
 

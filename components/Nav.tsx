@@ -14,7 +14,7 @@ export default function Nav() {
   const pathname = usePathname();
 
   return (
-    <nav className="w-full max-w-content mx-auto px-8 md:px-12 py-8 border-b border-black">
+    <nav className="w-full max-w-3xl lg:max-w-5xl xl:max-w-7xl 2xl:max-w-[90vw] mx-auto px-6 md:px-12 lg:px-20 py-8 border-b border-black">
       <div className="flex justify-between items-center">
         <Link href="/" className="text-base font-bold text-black hover:text-gray-600 transition-colors">
           Your Name

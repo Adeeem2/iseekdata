@@ -9,7 +9,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="w-full max-w-content mx-auto px-8 md:px-12 py-12 mt-20 border-t border-black">
+    <footer className="w-full max-w-3xl lg:max-w-5xl xl:max-w-7xl 2xl:max-w-[90vw] mx-auto px-6 md:px-12 lg:px-20 py-12 mt-20 border-t border-black">
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
         <p className="text-sm text-gray-600">
           © {new Date().getFullYear()} Your Name

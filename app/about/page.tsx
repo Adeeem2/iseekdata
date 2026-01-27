@@ -20,7 +20,7 @@ const skills = [
 
 export default function About() {
   return (
-    <div className="w-full max-w-content mx-auto px-5 md:px-10 py-12 min-h-screen flex flex-col justify-center">
+    <div className="w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto px-6 md:px-12 lg:px-20 py-12 min-h-screen flex flex-col justify-center">
       <h1 className="text-base font-medium text-[#e5e5e5] mb-12">About</h1>
 
       {/* Bio */}

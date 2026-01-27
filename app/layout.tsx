@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Github, Linkedin, Mail} from 'lucide-react';
+import { Particles } from "@/components/ui/particles";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,8 +33,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} antialiased bg-black`}>
         {/* Top centered social icons */}
-        <div className="w-full border-b border-black bg-black">
-          <div className="max-w-content mx-auto px-8 md:px-12 py-4">
+        <div className="relative z-10 w-full border-b border-transparent bg-transparent">
+          <div className="max-w-3xl lg:max-w-5xl xl:max-w-7xl 2xl:max-w-[90vw] mx-auto px-6 md:px-12 lg:px-20 py-4">
             <div className="flex justify-center items-center gap-6">
               <a href="https://github.com/Adeeem2" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="!text-white hover:text-gray-300 transition-colors">
                 <Github className="w-5 h-5" />
@@ -47,9 +48,17 @@ export default function RootLayout({
             </div>
           </div>
         </div>
-        <main className="min-h-screen bg-black">
+        <main className="relative z-10 min-h-screen bg-transparent">
           {children}
         </main>
+        <Particles
+          className="fixed inset-0 z-0 pointer-events-none"
+          quantity={150}
+          ease={50}
+          size={1}
+          color="#10b981"
+          refresh
+        />
       </body>
     </html>
   );
