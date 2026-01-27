@@ -157,7 +157,7 @@ export const AuroraShaders = forwardRef<HTMLDivElement, AuroraShadersProps>(
     ref,
   ) => {
     return (
-      <div className={cn("w-full h-full", className)} ref={ref} {...(props as any)}>
+      <div className={cn("w-full h-full", className)} ref={ref} {...(props as React.HTMLAttributes<HTMLDivElement>)}>
         <Shader
           fs={auroraShader}
           style={{ width: "100%", height: "100%" } as CSSStyleDeclaration}

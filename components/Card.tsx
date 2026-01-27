@@ -12,10 +12,10 @@ interface CardProps {
 
 export default function Card({ 
   title, 
-  description, 
+  // description, 
   href, 
-  tags, 
-  icon: Icon,
+  // tags, 
+  // icon: Icon,
   className = ''
 }: CardProps) {
   const content = (
