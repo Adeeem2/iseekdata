@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Github, Linkedin, Mail} from 'lucide-react';
 import { StarsBackground } from "@/components/animate-ui/components/backgrounds/stars";
+import { Particles } from "@/components/ui/particles";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -32,11 +33,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased`}>
+        {/* Stars background for desktop/tablet */}
         <StarsBackground 
-          className="fixed inset-0 z-0 pointer-events-none"
+          className="hidden md:block fixed inset-0 z-0 pointer-events-none"
           starColor="#10b981"
           speed={40}
-          pointerEvents={true}
+          pointerEvents={false}
+        />
+        {/* Particles background for mobile */}
+        <Particles
+          className="block md:hidden fixed inset-0 z-0 pointer-events-none"
+          quantity={150}
+          ease={50}
+          size={1}
+          color="#10b981"
+          refresh
         />
         {/* Top centered social icons */}
         <div className="relative z-10 w-full border-b border-transparent bg-transparent">
