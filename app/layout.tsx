@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Github, Linkedin, Mail} from 'lucide-react';
-import { Particles } from "@/components/ui/particles";
+import { StarsBackground } from "@/components/animate-ui/components/backgrounds/stars";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,7 +31,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased bg-black`}>
+      <body className={`${inter.variable} antialiased`}>
+        <StarsBackground 
+          className="fixed inset-0 z-0 pointer-events-none"
+          starColor="#10b981"
+          speed={40}
+          pointerEvents={true}
+        />
         {/* Top centered social icons */}
         <div className="relative z-10 w-full border-b border-transparent bg-transparent">
           <div className="max-w-3xl lg:max-w-5xl xl:max-w-7xl 2xl:max-w-[90vw] mx-auto px-6 md:px-12 lg:px-20 py-4">
@@ -42,7 +48,7 @@ export default function RootLayout({
               <a href="https://www.linkedin.com/in/edam-taktek-5b9b27338/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="!text-white hover:text-gray-300 transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
-              <a href="mailto:edam.taktek65@gmail.com" aria-label="Email" className="!text-white hover:text-gray-300 transition-colors">
+              <a href="mailto:edamtaktek@outlook.com" aria-label="Email" className="!text-white hover:text-gray-300 transition-colors">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
@@ -51,14 +57,6 @@ export default function RootLayout({
         <main className="relative z-10 min-h-screen bg-transparent">
           {children}
         </main>
-        <Particles
-          className="fixed inset-0 z-0 pointer-events-none"
-          quantity={150}
-          ease={50}
-          size={1}
-          color="#10b981"
-          refresh
-        />
       </body>
     </html>
   );
