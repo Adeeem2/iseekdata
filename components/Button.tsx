@@ -28,8 +28,8 @@ export default function Button({
   `;
 
   const variants = {
-    primary: 'bg-emerald-500/10 border-emerald-500 text-white font-semibold hover:bg-emerald-500/20 hover:text-white',
-    secondary: 'bg-emerald-500/10 border-emerald-500 text-white font-semibold hover:bg-emerald-500/20 hover:text-white',
+    primary: 'bg-emerald-500/10 border-emerald-500 !text-white font-semibold hover:bg-emerald-500/20 hover:!text-white',
+    secondary: 'bg-emerald-500/10 border-emerald-500 !text-white font-semibold hover:bg-emerald-500/20 hover:!text-white',
     outline: 'bg-white border-black text-black hover:bg-gray-50',
   };
 
