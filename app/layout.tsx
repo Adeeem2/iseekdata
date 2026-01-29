@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased bg-black`}>
         {/* Stars background for desktop/tablet */}
         <StarsBackground 
           className="hidden md:block fixed inset-0 z-0 pointer-events-none"
